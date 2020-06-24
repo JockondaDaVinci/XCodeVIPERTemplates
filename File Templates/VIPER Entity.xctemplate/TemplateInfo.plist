@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Kind</key>
+	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
+	<key>Description</key>
+	<string>New VIPER Entity.</string>
+	<key>Summary</key>
+	<string>New VIPER Entity</string>
+	<key>SortOrder</key>
+	<string>1</string>
+	<key>DefaultCompletionName</key>
+	<string>File</string>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>productName</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Entity name:</string>
+			<key>Description</key>
+			<string>The name of the entity to create</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>MainTemplateFiles</key>
+			<array>
+				<string>___FILEBASENAME___View.swift</string>
+				<string>___FILEBASENAME___ViewController.swift</string>
+				<string>___FILEBASENAME___Presenter.swift</string>
+				<string>___FILEBASENAME___Interactor.swift</string>
+				<string>___FILEBASENAME___Router.swift</string>
+				<string>___FILEBASENAME___Builder.swift</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
