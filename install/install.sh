@@ -5,6 +5,8 @@ nf="File Templates"
 np="Project Templates"
 cd $ndir
 
+su
+
 echo "Looking for \"$ntemp\" folder in your XCode directory..."
 if [ -d "$ndir/$ntemp" ]; then
 echo "\"$ntemp\" found, copying VIPER..."
