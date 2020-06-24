@@ -1,5 +1,5 @@
 #!/bin/bash
-ndir="~/Library/Developer/Xcode/"
+ndir="~/Library/Developer/Xcode"
 ntemp="Templates"
 nf="File Templates"
 np="Project Templates"
