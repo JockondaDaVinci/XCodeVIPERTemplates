@@ -1,8 +1,8 @@
 #!/bin/bash
 ndir="~/Library/Developer/Xcode"
 ntemp="Templates"
-nf="File Templates"
-np="Project Templates"
+nf="File\ Templates"
+np="Project\ Templates"
 cd $ndir
 
 su
