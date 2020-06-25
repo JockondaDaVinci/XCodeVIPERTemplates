@@ -8,7 +8,8 @@ This is a simple templates to make your XCode be able to create blank VIPER proj
 
 Open you Terminal and simply past this:
 
-```sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JockondaDaVinci/XCodeVIPERTemplates/master/Install/install.sh)"
+```
+sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JockondaDaVinci/XCodeVIPERTemplates/master/Install/install.sh)"
 ```
 
 After that you'll be prompted to enter your users password to grand privileges. 
