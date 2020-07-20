@@ -3,40 +3,40 @@
 import Foundation
 
 //MARK: - Translation of view events into presenter
-protocol ___FILEBASENAMEASIDENTIFIER___ViewToPresenter {
+protocol ___VARIABLE_productName___ViewToPresenter {
   func onViewLoaded()
-  func onViewEvent(_ event: ___FILEBASENAMEASIDENTIFIER___ViewEvent)
+  func onViewEvent(_ event: ___VARIABLE_productName___ViewEvent)
 }
 
 //MARK: - Translation of interactor events into presenter
-protocol ___FILEBASENAMEASIDENTIFIER___InteractorToPresenter {
+protocol ___VARIABLE_productName___InteractorToPresenter {
   func onInteractorError(_ error: Error)
   func onInteractorSuccess()
 }
 
 //MARK: - Additional inputs into view
-protocol ___FILEBASENAMEASIDENTIFIER___Inputs {
+protocol ___VARIABLE_productName___Inputs {
   
 }
 
 //MARK: - Basic realization of presenter
-final class ___FILEBASENAMEASIDENTIFIER___Presenter: ___FILEBASENAMEASIDENTIFIER___Inputs {
-  weak var view: ___FILEBASENAMEASIDENTIFIER___PresenterToView?
-  var interactor: ___FILEBASENAMEASIDENTIFIER___PresenterToInteractor?
-  var router: ___FILEBASENAMEASIDENTIFIER___Router.Routes?
+final class ___FILEBASENAMEASIDENTIFIER___: ___VARIABLE_productName___Inputs {
+  weak var view: ___VARIABLE_productName___PresenterToView?
+  var interactor: ___VARIABLE_productName___PresenterToInteractor?
+  var router: ___VARIABLE_productName___Router.Routes?
   
   //Module inputs
 }
 
 //MARK: - Operations with view
-extension ___FILEBASENAMEASIDENTIFIER___Presenter: ___FILEBASENAMEASIDENTIFIER___ViewToPresenter {
+extension ___FILEBASENAMEASIDENTIFIER___: ___VARIABLE_productName___ViewToPresenter {
   //MARK: Any additional setups e.g. launching network requests
   func onViewLoaded() {
     view?.setupInitialState()
   }
   
   //MARK: - Oparations with view events
-  func onViewEvent(_ event: ___FILEBASENAMEASIDENTIFIER___ViewEvent) {
+  func onViewEvent(_ event: ___VARIABLE_productName___ViewEvent) {
     switch event {
     default: break
     }
@@ -44,7 +44,7 @@ extension ___FILEBASENAMEASIDENTIFIER___Presenter: ___FILEBASENAMEASIDENTIFIER__
 }
 
 //MARK: - Operations with interactor
-extension ___FILEBASENAMEASIDENTIFIER___Presenter: ___FILEBASENAMEASIDENTIFIER___InteractorToPresenter {
+extension ___FILEBASENAMEASIDENTIFIER___: ___VARIABLE_productName___InteractorToPresenter {
   //MARK: Error handling
   func onInteractorError(_ error: Error) {
     debugPrint(error)

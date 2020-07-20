@@ -2,12 +2,12 @@
 
 import Foundation
 
-final class ___FILEBASENAMEASIDENTIFIER___Builder: BaseBuilder {
-  static func create() -> (presenter: ___FILEBASENAMEASIDENTIFIER___Inputs, view: Modulable, router: BaseRouter) {
-    let view = ___FILEBASENAMEASIDENTIFIER___ViewController()
-    let presenter = ___FILEBASENAMEASIDENTIFIER___Presenter()
-    let interactor = ___FILEBASENAMEASIDENTIFIER___Interactor()
-    let router = ___FILEBASENAMEASIDENTIFIER___Router()
+final class ___FILEBASENAMEASIDENTIFIER___: BaseBuilder {
+  static func create() -> (presenter: ___VARIABLE_productName___Inputs, view: Modulable, router: BaseRouter) {
+    let view = ___VARIABLE_productName___ViewController()
+    let presenter = ___VARIABLE_productName___Presenter()
+    let interactor = ___VARIABLE_productName___Interactor()
+    let router = ___VARIABLE_productName___Router()
 
     view.presenter = presenter
     

@@ -2,7 +2,7 @@
 
 import UIKit
 
-class ___FILEBASENAMEASIDENTIFIER___View: BuildableView {
+class ___FILEBASENAMEASIDENTIFIER___: BuildableView {
   //MARK: - Subviews
   
   //MARK: - Add subviews into array

@@ -4,18 +4,18 @@ import Foundation
 import UIKit
 
 //MARK: - Define event from view
-enum ___FILEBASENAMEASIDENTIFIER___ViewEvent {
+enum ___VARIABLE_productName___ViewEvent {
   
 }
 
 //MARK: - Define functions that will be implemented in ViewController
-protocol ___FILEBASENAMEASIDENTIFIER___PresenterToView: AnyObject {
+protocol ___VARIABLE_productName___PresenterToView: AnyObject {
   func setupInitialState()
 }
 
 //MARK: - Implementation of ViewController
-final class ___FILEBASENAMEASIDENTIFIER___ViewController: BuildableViewController<___FILEBASENAMEASIDENTIFIER___View> {
-  var presenter: ___FILEBASENAMEASIDENTIFIER___ViewToPresenter?
+final class ___FILEBASENAMEASIDENTIFIER___: BuildableViewController<___VARIABLE_productName___View> {
+  var presenter: ___VARIABLE_productName___ViewToPresenter?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -24,7 +24,7 @@ final class ___FILEBASENAMEASIDENTIFIER___ViewController: BuildableViewControlle
 }
 
 //MARK: - Implementation of defined funtions
-extension ___FILEBASENAMEASIDENTIFIER___ViewController: ___FILEBASENAMEASIDENTIFIER___PresenterToView {
+extension ___FILEBASENAMEASIDENTIFIER___: ___VARIABLE_productName___PresenterToView {
   func setupInitialState() {
     setupUI()
     setupActions()
@@ -32,7 +32,7 @@ extension ___FILEBASENAMEASIDENTIFIER___ViewController: ___FILEBASENAMEASIDENTIF
 }
 
 //MARK: - Private extension with additional setup
-private extension ___FILEBASENAMEASIDENTIFIER___ViewController {
+private extension ___FILEBASENAMEASIDENTIFIER___ {
   func setupUI() {
     
   }

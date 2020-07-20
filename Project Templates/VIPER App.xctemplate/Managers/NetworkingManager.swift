@@ -1,9 +1,54 @@
-//___FILEHEADER___
+//
+//  NetworkingManager.swift
+//  OrgTech
+//
+//  Created by Maksym Balukhtin on 22.04.2020.
+//  Copyright © 2020 Maksym Balukhtin. All rights reserved.
+//
 
 import Foundation
 
 protocol JSONEncodable: Codable {
   func toJSONData() -> Data?
+}
+
+@frozen enum DataTaskResult<ResultType: Codable> {
+  case success(ResultType)
+  case error(DataTaskError<ResultType>)
+}
+
+@frozen enum DataTaskError<DecodeType>: Error {
+  case genericError(Error)
+  case invalidURL(String)
+  case invalidRequestBody(Decodable)
+  case dataIsEmpty
+  case cannotObtainData(Int)
+  case invalidDecoding(Data, DecodeType)
+  
+  var localizedDescription: String {
+    let headMsg = "Error:"
+    var errMsg = ""
+    
+    switch self {
+    case .genericError(let error):
+      errMsg = error.localizedDescription
+    case .invalidURL(let urlStr):
+      errMsg = [urlStr, "cannot be convertet to URL"].joined(separator: " ")
+    case .invalidRequestBody(let object):
+      errMsg = "Cannot obtain correct data from: \(object)"
+    case .dataIsEmpty:
+      errMsg = "Request returned empty body"
+    case .cannotObtainData(let status):
+      errMsg = "Data cannot be obtained because of server status: \(status)"
+    case .invalidDecoding(let data, let decodeType):
+      errMsg = ["Unable to decode obtined data",
+                String(data: data, encoding: .utf8) ?? "",
+                "as \(type(of: decodeType))"]
+        .joined(separator: " ")
+    }
+    
+    return [headMsg, errMsg].joined(separator: " ")
+  }
 }
 
 final class NetworkingManager {
@@ -15,42 +60,56 @@ final class NetworkingManager {
     session = URLSession(configuration: configuration)
   }
   
-  func startGetTask<ObjectType: Codable>(forURL url: String, object: ObjectType.Type, completion: @escaping (ObjectType?, Error?) -> Void) {
-    guard let url = URL(string: url) else {
-      completion(nil, NetworkError.invalidURL)
+  func startGetTask<ObjectType: Codable>(forURL urlStr: String, object: ObjectType.Type, completion: @escaping (DataTaskResult<ObjectType>) -> Void) {
+    guard let url = URL(string: urlStr) else {
+      completion(.error(.invalidURL(urlStr)))
       return
     }
     
     session.dataTask(with: url) { data, response, error in
-      if error != nil || data == nil {
+      if let response = response as? HTTPURLResponse, 400...600 ~= response.statusCode {
         dispatchMain {
-          completion(nil, error)
+          completion(.error(.cannotObtainData(response.statusCode)))
+        }
+        return
+      }
+      
+      if let error = error, data == nil {
+        dispatchMain {
+          completion(.error(.genericError(error)))
+        }
+        return
+      }
+      
+      guard let data = data else {
+        dispatchMain {
+          completion(.error(.dataIsEmpty))
         }
         return
       }
       
       do {
         let decoder = JSONDecoder()
-        let object = try decoder.decode(ObjectType.self, from: data!)
+        let object = try decoder.decode(ObjectType.self, from: data)
         dispatchMain {
-          completion(object, nil)
+          completion(.success(object))
         }
       } catch {
         dispatchMain {
-          completion(nil, error)
+          completion(.error(.genericError(error)))
         }
       }
     }.resume()
   }
   
-  func startPostTask<PostObjectType, ResponseObjectType>(forURL url: String, postObject: PostObjectType, responseObject: ResponseObjectType.Type, completion: @escaping (ResponseObjectType?, Error?) -> Void) where PostObjectType: JSONEncodable, ResponseObjectType: Codable {
-    guard let url = URL(string: url) else {
-      completion(nil, NetworkError.invalidURL)
+  func startPostTask<PostObjectType, ResponseObjectType>(forURL urlStr: String, postObject: PostObjectType, responseObject: ResponseObjectType.Type, completion: @escaping (DataTaskResult<ResponseObjectType>) -> Void) where PostObjectType: JSONEncodable, ResponseObjectType: Codable {
+    guard let url = URL(string: urlStr) else {
+      completion(.error(.invalidURL(urlStr)))
       return
     }
     
     guard let httpBody = postObject.toJSONData() else {
-      completion(nil, NetworkError.invalidBody)
+      completion(.error(.invalidRequestBody(postObject)))
       return
     }
     
@@ -60,37 +119,71 @@ final class NetworkingManager {
     request.httpBody = httpBody
     
     session.dataTask(with: request) { data, response, error in
-      if error != nil || data == nil {
+      if let response = response as? HTTPURLResponse, 400...600 ~= response.statusCode {
         dispatchMain {
-          completion(nil, error)
+          completion(.error(.cannotObtainData(response.statusCode)))
+        }
+        return
+      }
+      
+      if let error = error, data == nil {
+        dispatchMain {
+          completion(.error(.genericError(error)))
+        }
+        return
+      }
+      
+      guard let data = data else {
+        dispatchMain {
+          completion(.error(.dataIsEmpty))
         }
         return
       }
       
       do {
         let decoder = JSONDecoder()
-        let object = try decoder.decode(ResponseObjectType.self, from: data!)
+        let object = try decoder.decode(ResponseObjectType.self, from: data)
         dispatchMain {
-          completion(object, nil)
+          completion(.success(object))
         }
       } catch {
         dispatchMain {
-          completion(nil, error)
+          completion(.error(.genericError(error)))
         }
       }
     }.resume()
   }
   
-  func downloadImage(forURL urlStr: String, completion: @escaping (Data?, Error?) -> ()) {
-    guard let url = URL(string: [API.apiBase, urlStr].joined()) else { return }
+  func downloadImage(forURL urlStr: String, completion: @escaping (DataTaskResult<Data>) -> ()) {
+    guard let url = URL(string: [API.apiBase, urlStr].joined()) else {
+      completion(.error(.invalidURL(urlStr)))
+      return
+    }
     session.dataTask(with: url) { data, response, error in
-      if error != nil || data == nil {
-        completion(nil, error)
+      if let response = response as? HTTPURLResponse, 400...600 ~= response.statusCode {
+        dispatchMain {
+          completion(.error(.cannotObtainData(response.statusCode)))
+        }
         return
       }
+      
+      if let error = error, data == nil {
+        dispatchMain {
+          completion(.error(.genericError(error)))
+        }
+        return
+      }
+      
+      guard let data = data else {
+        dispatchMain {
+          completion(.error(.dataIsEmpty))
+        }
+        return
+      }
+      
       dispatchMain {
         CacheManager.shared.cacheImage(data, byKey: urlStr)
-        completion(data, error)
+        completion(.success(data))
       }
     }.resume()
   }
